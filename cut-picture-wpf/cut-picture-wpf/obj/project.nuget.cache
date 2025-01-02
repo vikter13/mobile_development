@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "DPIpk3u3r2k=",
+  "success": true,
+  "projectFilePath": "C:\\stud-folder\\mobile_development\\cut-picture-wpf\\cut-picture-wpf\\cut-picture-wpf.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\victor\\.nuget\\packages\\microsoft.win32.systemevents\\9.0.0\\microsoft.win32.systemevents.9.0.0.nupkg.sha512",
+    "C:\\Users\\victor\\.nuget\\packages\\system.drawing.common\\9.0.0\\system.drawing.common.9.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}

@@ -1,0 +1,6 @@
+C:\stud-folder\mobile_development\cut-picture-wpf\class-library-cut-picture\bin\Debug\class-library-cut-picture.dll
+C:\stud-folder\mobile_development\cut-picture-wpf\class-library-cut-picture\bin\Debug\class-library-cut-picture.pdb
+C:\stud-folder\mobile_development\cut-picture-wpf\class-library-cut-picture\obj\Debug\class-library-cut-picture.csproj.AssemblyReference.cache
+C:\stud-folder\mobile_development\cut-picture-wpf\class-library-cut-picture\obj\Debug\class-library-cut-picture.csproj.CoreCompileInputs.cache
+C:\stud-folder\mobile_development\cut-picture-wpf\class-library-cut-picture\obj\Debug\class-library-cut-picture.dll
+C:\stud-folder\mobile_development\cut-picture-wpf\class-library-cut-picture\obj\Debug\class-library-cut-picture.pdb

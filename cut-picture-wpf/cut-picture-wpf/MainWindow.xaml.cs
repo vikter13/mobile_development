@@ -1,28 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using ClassLibraryCutPicture; // Подключаем пространство имен
 
-namespace cut_picture_wpf
+namespace CutPictureWpf
 {
-    /// <summary>
-    /// Логика взаимодействия для MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
+        private ImageHandler imageHandler; // Объект для работы с изображением
+
         public MainWindow()
         {
             InitializeComponent();
+            imageHandler = new ImageHandler(); // Инициализация объекта ImageHandler
+        }
+
+        private void LoadImageButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Логика загрузки изображения
+            imageHandler.LoadImage("path_to_image.jpg");
+            // Покажите изображение в интерфейсе
         }
     }
 }
