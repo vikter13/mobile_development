@@ -22,3 +22,4 @@ C:\stud-folder\mobile_development\cut-picture-wpf\cut-picture-wpf\obj\Debug\net9
 C:\stud-folder\mobile_development\cut-picture-wpf\cut-picture-wpf\obj\Debug\net9.0-windows\cut-picture-wpf.pdb
 C:\stud-folder\mobile_development\cut-picture-wpf\cut-picture-wpf\obj\Debug\net9.0-windows\cut-picture-wpf.genruntimeconfig.cache
 C:\stud-folder\mobile_development\cut-picture-wpf\cut-picture-wpf\obj\Debug\net9.0-windows\ref\cut-picture-wpf.dll
+C:\stud-folder\mobile_development\cut-picture-wpf\cut-picture-wpf\bin\Debug\net9.0-windows\Newtonsoft.Json.dll

@@ -310,3 +310,4 @@ C:\stud-folder\mobile_development\cut-picture-wpf\cut-picture-maui\obj\Debug\net
 C:\stud-folder\mobile_development\cut-picture-wpf\cut-picture-maui\obj\Debug\net9.0-ios\iossimulator-x64\cut-picture-maui.pdb
 C:\stud-folder\mobile_development\cut-picture-wpf\cut-picture-maui\obj\Debug\net9.0-ios\iossimulator-x64\cut-picture-maui.genruntimeconfig.cache
 C:\stud-folder\mobile_development\cut-picture-wpf\cut-picture-maui\obj\Debug\net9.0-ios\iossimulator-x64\ref\cut-picture-maui.dll
+C:\stud-folder\mobile_development\cut-picture-wpf\cut-picture-maui\obj\Debug\net9.0-ios\iossimulator-x64\build-signature\signature
