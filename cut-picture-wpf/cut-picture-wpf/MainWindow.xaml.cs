@@ -172,8 +172,11 @@ namespace ImageEditor
                 try
                 {
                     var baseFolder = System.IO.Path.GetDirectoryName(dialog.FileName);
-                    var baseFileName =  System.IO.Path.GetFileNameWithoutExtension(dialog.FileName);
+                    var baseFileName = System.IO.Path.GetFileNameWithoutExtension(dialog.FileName);
                     var index = 1;
+
+                    // Получаем угол поворота из ImageRotation
+                    float rotationAngle = (float)ImageRotation.Angle;
 
                     foreach (var rect in _selectionRectangles)
                     {
@@ -196,11 +199,14 @@ namespace ImageEditor
                         cropRect.Width = Math.Min(cropRect.Width, imageSize.Width - cropRect.X);
                         cropRect.Height = Math.Min(cropRect.Height, imageSize.Height - cropRect.Y);
 
-                        // Обрезаем и сохраняем изображение
+                        // Обрезаем изображение, чтобы получить фрагмент с учетом поворота
                         using (var croppedImage = _imageHandler.CropImage(cropRect))
                         {
+                            // Применяем поворот к обрезанному изображению
+                            Bitmap rotatedImage = RotateImage(croppedImage, rotationAngle);
+
                             string fileName = System.IO.Path.Combine(baseFolder!, $"{baseFileName}_{index}.png");
-                            croppedImage.Save(fileName, ImageFormat.Png);
+                            rotatedImage.Save(fileName, ImageFormat.Png);
                         }
 
                         index++;
@@ -216,6 +222,24 @@ namespace ImageEditor
                 }
             }
         }
+
+        private Bitmap RotateImage(Bitmap image, float angle)
+        {
+            // Создаем новое изображение, чтобы учесть поворот
+            Bitmap rotatedBitmap = new Bitmap(image.Width, image.Height);
+            rotatedBitmap.SetResolution(image.HorizontalResolution, image.VerticalResolution);
+
+            using (Graphics g = Graphics.FromImage(rotatedBitmap))
+            {
+                // Поворачиваем картинку вокруг ее центра
+                g.Clear(System.Drawing.Color.Transparent);
+                g.RotateTransform(angle);
+                g.DrawImage(image, new System.Drawing.Point(0, 0));
+            }
+
+            return rotatedBitmap;
+        }
+
 
 
         private void ScrollViewer_MouseWheel(object sender, MouseWheelEventArgs e)

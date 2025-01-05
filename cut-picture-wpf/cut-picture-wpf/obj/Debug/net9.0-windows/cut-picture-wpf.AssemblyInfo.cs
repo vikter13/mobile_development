@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("cut-picture-wpf")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9232a71c3c928c20fe7f107844b94ae812c371ab")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5a8f458f906b540be0777b00cada24cd662e7f89")]
 [assembly: System.Reflection.AssemblyProductAttribute("cut-picture-wpf")]
 [assembly: System.Reflection.AssemblyTitleAttribute("cut-picture-wpf")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
