@@ -73,17 +73,35 @@ namespace ImageEditor
 
         public Bitmap CropImage(Rectangle cropArea)
         {
-            if (_image != null)
+            if (_image == null)
+                throw new InvalidOperationException("No image to crop.");
+
+            // Проверяем и корректируем размеры области обрезки
+            cropArea = new Rectangle(
+                Math.Max(0, cropArea.X),
+                Math.Max(0, cropArea.Y),
+                Math.Min(cropArea.Width, _image.Width - cropArea.X),
+                Math.Min(cropArea.Height, _image.Height - cropArea.Y)
+            );
+
+            // Создаем новое изображение для обрезанной области
+            Bitmap croppedImage = new Bitmap(cropArea.Width, cropArea.Height);
+
+            using (Graphics g = Graphics.FromImage(croppedImage))
             {
-                var croppedImage = new Bitmap(cropArea.Width, cropArea.Height);
-                using (var g = Graphics.FromImage(croppedImage))
-                {
-                    g.DrawImage(_image, new Rectangle(0, 0, cropArea.Width, cropArea.Height),
-                        cropArea, GraphicsUnit.Pixel);
-                }
-                return croppedImage;
+                g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
+                g.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
+
+                // Копируем выбранную область в новое изображение
+                g.DrawImage(
+                    _image,
+                    new Rectangle(0, 0, cropArea.Width, cropArea.Height),
+                    cropArea,
+                    GraphicsUnit.Pixel);
             }
-            throw new InvalidOperationException("No image to crop.");
+
+            return croppedImage;
         }
 
         // Метод GetImageSize для получения размера изображения
