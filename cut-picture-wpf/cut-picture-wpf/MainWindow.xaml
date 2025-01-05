@@ -12,21 +12,21 @@
         <StackPanel Grid.Column="0" Margin="10">
             <Button Content="Загрузить картинку" Name="LoadImageButton" 
                     Margin="0,5" Padding="5" Click="LoadImageButton_Click"/>
-
+            
             <GroupBox Header="Настройки сетки" Margin="0,10">
                 <StackPanel>
                     <TextBlock Text="Рядов:" Margin="0,10,0,0"/>
                     <ComboBox Name="RowsComboBox" Margin="0,5" 
                               SelectionChanged="GridSettings_Changed"/>
-
+                    
                     <TextBlock Text="Колонок:" Margin="0,10,0,0"/>
                     <ComboBox Name="ColumnsComboBox" Margin="0,5" 
                               SelectionChanged="GridSettings_Changed"/>
-
+                    
                     <TextBlock Text="Отступы горизонтальные:" Margin="0,10,0,0"/>
                     <ComboBox Name="HorizontalPaddingComboBox" Margin="0,5" 
                               SelectionChanged="GridSettings_Changed"/>
-
+                    
                     <TextBlock Text="Отступы вертикальные:" Margin="0,10,0,0"/>
                     <ComboBox Name="VerticalPaddingComboBox" Margin="0,5" 
                               SelectionChanged="GridSettings_Changed"/>
@@ -52,16 +52,18 @@
 
             <Button Content="Сохранить области" Name="SaveAreasButton" 
                     Margin="0,10,0,5" Padding="5" Click="SaveAreasButton_Click"/>
-
+            
             <Button Content="Сохранить настройки" Name="SaveSettingsButton" 
                     Margin="0,5" Padding="5" Click="SaveSettingsButton_Click"/>
-
+            
             <Button Content="Загрузить настройки" Name="LoadSettingsButton" 
                     Margin="0,5" Padding="5" Click="LoadSettingsButton_Click"/>
         </StackPanel>
 
         <ScrollViewer Grid.Column="1" HorizontalScrollBarVisibility="Auto" 
                       VerticalScrollBarVisibility="Auto" 
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Center"
                       Background="LightGray"
                       MouseWheel="ScrollViewer_MouseWheel"
                       MouseRightButtonDown="ScrollViewer_MouseRightButtonDown"
@@ -76,7 +78,7 @@
                         </TransformGroup>
                     </Image.RenderTransform>
                 </Image>
-                <Canvas Name="SelectionCanvas"/>
+                <Canvas Name="SelectionCanvas" />
             </Grid>
         </ScrollViewer>
     </Grid>
