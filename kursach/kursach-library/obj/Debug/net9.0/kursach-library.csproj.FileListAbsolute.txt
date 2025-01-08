@@ -1,0 +1,15 @@
+C:\stud-folder\mobile_development\kursach\kursach-library\obj\Debug\net9.0\kursach-library.GeneratedMSBuildEditorConfig.editorconfig
+C:\stud-folder\mobile_development\kursach\kursach-library\obj\Debug\net9.0\kursach-library.AssemblyInfoInputs.cache
+C:\stud-folder\mobile_development\kursach\kursach-library\obj\Debug\net9.0\kursach-library.AssemblyInfo.cs
+C:\stud-folder\mobile_development\kursach\kursach-library\obj\Debug\net9.0\kursach-library.csproj.CoreCompileInputs.cache
+C:\stud-folder\mobile_development\kursach\kursach-library\obj\Debug\net9.0\kursach-library.sourcelink.json
+C:\stud-folder\mobile_development\kursach\kursach-library\obj\Debug\net9.0\kursach-library.csproj.AssemblyReference.cache
+C:\stud-folder\mobile_development\kursach\kursach-library\bin\Debug\net9.0\kursach-library.deps.json
+C:\stud-folder\mobile_development\kursach\kursach-library\bin\Debug\net9.0\kursach-library.runtimeconfig.json
+C:\stud-folder\mobile_development\kursach\kursach-library\bin\Debug\net9.0\kursach-library.dll
+C:\stud-folder\mobile_development\kursach\kursach-library\bin\Debug\net9.0\kursach-library.pdb
+C:\stud-folder\mobile_development\kursach\kursach-library\obj\Debug\net9.0\kursach-library.dll
+C:\stud-folder\mobile_development\kursach\kursach-library\obj\Debug\net9.0\refint\kursach-library.dll
+C:\stud-folder\mobile_development\kursach\kursach-library\obj\Debug\net9.0\kursach-library.pdb
+C:\stud-folder\mobile_development\kursach\kursach-library\obj\Debug\net9.0\kursach-library.genruntimeconfig.cache
+C:\stud-folder\mobile_development\kursach\kursach-library\obj\Debug\net9.0\ref\kursach-library.dll

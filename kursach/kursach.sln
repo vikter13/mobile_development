@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35527.113 d17.12
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "kursach-wpf", "kursach-wpf\kursach-wpf.csproj", "{61F4B7EB-F201-4B4C-BC63-56B76422F51E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "kursach-library", "kursach-library\kursach-library.csproj", "{62B0FF82-110E-468A-B884-F00649287E91}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{61F4B7EB-F201-4B4C-BC63-56B76422F51E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61F4B7EB-F201-4B4C-BC63-56B76422F51E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61F4B7EB-F201-4B4C-BC63-56B76422F51E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61F4B7EB-F201-4B4C-BC63-56B76422F51E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62B0FF82-110E-468A-B884-F00649287E91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62B0FF82-110E-468A-B884-F00649287E91}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62B0FF82-110E-468A-B884-F00649287E91}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62B0FF82-110E-468A-B884-F00649287E91}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
