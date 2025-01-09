@@ -25,11 +25,19 @@ namespace ImageEditor
         private readonly List<Rectangle> _selectionRectangles = new();
         private int _rows = 2;
         private int _columns = 3;
-        private int _horizontalPadding = 2;
-        private int _verticalPadding = 2;
+        private int _horizontalPadding = 10;
+        private int _verticalPadding = 10;
+
+        private Point _dragStartPoint;
+        private bool _isDraggingGrid;
+        private Canvas _gridCanvas;
 
         private Point _rightMouseStartPoint;
         private bool _isRightMouseDragging;
+
+        private Point _dragStartPointForRectangle;
+        private bool _isDraggingRectangle;
+        private Rectangle _draggingRectangle;
 
         public MainWindow()
         {
@@ -42,8 +50,8 @@ namespace ImageEditor
         {
             RowsComboBox.ItemsSource = Enumerable.Range(1, 10);
             ColumnsComboBox.ItemsSource = Enumerable.Range(1, 10);
-            HorizontalPaddingComboBox.ItemsSource = Enumerable.Range(0, 21);
-            VerticalPaddingComboBox.ItemsSource = Enumerable.Range(0, 21);
+            HorizontalPaddingComboBox.ItemsSource = Enumerable.Range(0, 50);
+            VerticalPaddingComboBox.ItemsSource = Enumerable.Range(0, 50);
 
             RowsComboBox.SelectedItem = _rows;
             ColumnsComboBox.SelectedItem = _columns;
@@ -111,50 +119,26 @@ namespace ImageEditor
         private void GridSettings_Changed(object sender, RoutedEventArgs e)
         {
             if (RowsComboBox.SelectedItem != null)
-            {
                 _rows = (int)RowsComboBox.SelectedItem;
-            }
-            else
-            {
-                _rows = 0;
-            }
 
             if (ColumnsComboBox.SelectedItem != null)
-            {
                 _columns = (int)ColumnsComboBox.SelectedItem;
-            }
-            else
-            {
-                _columns = 0;
-            }
 
             if (HorizontalPaddingComboBox.SelectedItem != null)
-            {
                 _horizontalPadding = (int)HorizontalPaddingComboBox.SelectedItem;
-            }
-            else
-            {
-                _horizontalPadding = 0;
-            }
 
             if (VerticalPaddingComboBox.SelectedItem != null)
-            {
                 _verticalPadding = (int)VerticalPaddingComboBox.SelectedItem;
-            }
-            else
-            {
-                _verticalPadding = 0;
-            }
 
             CreateSelectionGrid();
         }
 
-        public void SaveAreasButton_Click(object sender, RoutedEventArgs e)
+
+        private void SaveAreasButton_Click(object sender, RoutedEventArgs e)
         {
             if (_imageHandler.GetImage() == null || _selectionRectangles.Count == 0)
             {
-                MessageBox.Show("Нет изображения или областей для сохранения.", "Ошибка",
-                    MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Нет изображения или областей для сохранения.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
@@ -172,47 +156,48 @@ namespace ImageEditor
                     var baseFileName = System.IO.Path.GetFileNameWithoutExtension(dialog.FileName);
                     var index = 1;
 
-                    float rotationAngle = (float)ImageRotation.Angle;
+                    // Получаем изображение
+                    var image = _imageHandler.GetImage();
 
+                    // Перебираем все прямоугольники и сохраняем каждую область
                     foreach (var rect in _selectionRectangles)
                     {
+                        // Получаем координаты и размеры прямоугольника на канвасе
                         var left = Canvas.GetLeft(rect);
                         var top = Canvas.GetTop(rect);
+                        var width = rect.Width;
+                        var height = rect.Height;
 
+                        // Проверка на корректность размеров
+                        if (width <= 0 || height <= 0) continue; // Пропускаем пустые области
+
+                        // Создаем объект Rectangle для обрезки с координатами относительно изображения
                         var cropRect = new System.Drawing.Rectangle(
-                                (int)left,
-                                (int)top,
-                                (int)rect.Width,
-                                (int)rect.Height
+                            (int)left,    // X-координата
+                            (int)top,     // Y-координата
+                            (int)width,   // Ширина
+                            (int)height   // Высота
                         );
-
-                        var imageSize = _imageHandler.GetImageSize();
-                        cropRect.X = Math.Max(0, Math.Min(cropRect.X, imageSize.Width - 1));
-                        cropRect.Y = Math.Max(0, Math.Min(cropRect.Y, imageSize.Height - 1));
-                        cropRect.Width = Math.Min(cropRect.Width, imageSize.Width - cropRect.X);
-                        cropRect.Height = Math.Min(cropRect.Height, imageSize.Height - cropRect.Y);
 
                         using (var croppedImage = _imageHandler.CropImage(cropRect))
                         {
-                            Bitmap rotatedImage = RotateImage(croppedImage, rotationAngle);
-
+                            // Сохранение изображения в файл
                             string fileName = System.IO.Path.Combine(baseFolder!, $"{baseFileName}_{index}.png");
-                            rotatedImage.Save(fileName, ImageFormat.Png);
+                            croppedImage.Save(fileName, ImageFormat.Png);
+                            index++;
                         }
-
-                        index++;
                     }
 
-                    MessageBox.Show($"Области успешно сохранены в папку:\n{baseFolder}",
-                        "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show($"Области успешно сохранены в папку:\n{baseFolder}", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Ошибка при сохранении областей: {ex.Message}",
-                        "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show($"Ошибка при сохранении областей: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
+
+
 
         private Bitmap RotateImage(Bitmap image, float angle)
         {
@@ -326,28 +311,30 @@ namespace ImageEditor
             }
         }
 
-        public void CreateSelectionGrid()
+        private void CreateSelectionGrid()
         {
             SelectionCanvas.Children.Clear();
             _selectionRectangles.Clear();
 
             if (_imageHandler.GetImage() == null) return;
 
-            var imageSize = _imageHandler.GetImageSize();
-            var canvasWidth = SelectionCanvas.ActualWidth;
-            var canvasHeight = SelectionCanvas.ActualHeight;
+            _gridCanvas = new Canvas
+            {
+                Width = SelectionCanvas.ActualWidth,
+                Height = SelectionCanvas.ActualHeight,
+                Background = System.Windows.Media.Brushes.Transparent
+            };
+            SelectionCanvas.Children.Add(_gridCanvas);
 
-            if (canvasWidth <= 0 || canvasHeight <= 0) return;
-
-            var cellWidth = imageSize.Width / _columns;
-            var cellHeight = imageSize.Height / _rows;
+            double cellWidth = (_gridCanvas.Width - _horizontalPadding * (_columns - 1)) / _columns;
+            double cellHeight = (_gridCanvas.Height - _verticalPadding * (_rows - 1)) / _rows;
 
             for (int row = 0; row < _rows; row++)
             {
                 for (int col = 0; col < _columns; col++)
                 {
-                    var x = col * cellWidth;
-                    var y = row * cellHeight;
+                    var x = col * (cellWidth + _horizontalPadding);
+                    var y = row * (cellHeight + _verticalPadding);
 
                     var rect = new Rectangle
                     {
@@ -360,10 +347,98 @@ namespace ImageEditor
 
                     Canvas.SetLeft(rect, x);
                     Canvas.SetTop(rect, y);
-                    SelectionCanvas.Children.Add(rect);
+                    _gridCanvas.Children.Add(rect);
                     _selectionRectangles.Add(rect);
+
+                    // Добавляем обработчики событий для перетаскивания каждого прямоугольника
+                    rect.MouseLeftButtonDown += SelectionRectangle_MouseLeftButtonDown;
+                    rect.MouseLeftButtonUp += SelectionRectangle_MouseLeftButtonUp;
+                    rect.MouseMove += SelectionRectangle_MouseMove;
                 }
             }
         }
+
+        private void SelectionRectangle_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (!_isDraggingRectangle) return;
+
+            // Получаем текущую точку мыши
+            var currentPoint = e.GetPosition(SelectionCanvas);
+
+            // Находим смещение относительно начальной точки
+            var offsetX = currentPoint.X - _dragStartPointForRectangle.X;
+            var offsetY = currentPoint.Y - _dragStartPointForRectangle.Y;
+
+            // Перемещаем все прямоугольники
+            foreach (var rectangle in _selectionRectangles)
+            {
+                double newLeft = Canvas.GetLeft(rectangle) + offsetX;
+                double newTop = Canvas.GetTop(rectangle) + offsetY;
+
+                // Ограничиваем перемещение прямоугольников в пределах Canvas
+                newLeft = Math.Max(0, Math.Min(newLeft, SelectionCanvas.ActualWidth - rectangle.Width));
+                newTop = Math.Max(0, Math.Min(newTop, SelectionCanvas.ActualHeight - rectangle.Height));
+
+                Canvas.SetLeft(rectangle, newLeft);
+                Canvas.SetTop(rectangle, newTop);
+            }
+
+            // Обновляем начальную точку для вычисления смещения
+            _dragStartPointForRectangle = currentPoint;
+        }
+
+
+        private void SelectionRectangle_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            var rect = sender as Rectangle;
+            if (rect == null) return;
+
+            // Запоминаем начальную точку перетаскивания
+            _dragStartPointForRectangle = e.GetPosition(SelectionCanvas);
+
+            // Устанавливаем флаг, что перетаскивание начато
+            _isDraggingRectangle = true;
+
+            // Удерживаем захват мыши на всех прямоугольниках
+            foreach (var rectangle in _selectionRectangles)
+            {
+                rectangle.CaptureMouse();
+            }
+        }
+
+
+        private void SelectionRectangle_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            _isDraggingRectangle = false;
+
+            // Освобождаем захват всех прямоугольников
+            foreach (var rectangle in _selectionRectangles)
+            {
+                rectangle.ReleaseMouseCapture();
+            }
+        }
+
+
+
+        private void GridCanvas_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (!_isDraggingGrid) return;
+
+            var currentPoint = e.GetPosition(SelectionCanvas);
+            var offsetX = currentPoint.X - _dragStartPoint.X;
+            var offsetY = currentPoint.Y - _dragStartPoint.Y;
+
+            double newLeft = Canvas.GetLeft(_gridCanvas) + offsetX;
+            double newTop = Canvas.GetTop(_gridCanvas) + offsetY;
+
+            newLeft = Math.Max(0, Math.Min(newLeft, SelectionCanvas.ActualWidth - _gridCanvas.Width));
+            newTop = Math.Max(0, Math.Min(newTop, SelectionCanvas.ActualHeight - _gridCanvas.Height));
+
+            Canvas.SetLeft(_gridCanvas, newLeft);
+            Canvas.SetTop(_gridCanvas, newTop);
+
+            _dragStartPoint = currentPoint;
+        }
+
     }
 }

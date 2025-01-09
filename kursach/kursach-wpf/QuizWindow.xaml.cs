@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media.Imaging;
 using KursachLibrary;
 
 namespace kursach_wpf
@@ -18,6 +19,14 @@ namespace kursach_wpf
             _quizId = quizId;
             _userId = userId;
             _questions = DatabaseHelper.GetQuestions(quizId);
+
+            if (_questions.Count == 0)
+            {
+                MessageBox.Show("Вопросов в этом квизе нет!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                Close();
+                return;
+            }
+
             _currentQuestionIndex = 0;
             LoadQuestion();
         }
@@ -34,18 +43,42 @@ namespace kursach_wpf
             var question = _questions[_currentQuestionIndex];
             QuestionText.Text = question.QuestionText;
 
-            // Установка текста и индекса ответа для каждой кнопки.
-            Answer1Button.Content = question.Answers[0];
-            Answer1Button.Tag = 1; // Устанавливаем индекс ответа.
+            // Отображение изображения для вопроса
+            if (!string.IsNullOrEmpty(question.ImagePath) && System.IO.File.Exists(question.ImagePath))
+            {
+                QuestionImage.Source = new BitmapImage(new Uri(question.ImagePath, UriKind.Absolute));
+                QuestionImage.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                QuestionImage.Visibility = Visibility.Collapsed;
+            }
 
-            Answer2Button.Content = question.Answers[1];
-            Answer2Button.Tag = 2;
+            // Установка содержимого для кнопок (текст или изображения)
+            SetButtonContent(Answer1Button, Answer1Image, question.Answers[0], question.AnswerImagePaths[0]);
+            SetButtonContent(Answer2Button, Answer2Image, question.Answers[1], question.AnswerImagePaths[1]);
+            SetButtonContent(Answer3Button, Answer3Image, question.Answers[2], question.AnswerImagePaths[2]);
+            SetButtonContent(Answer4Button, Answer4Image, question.Answers[3], question.AnswerImagePaths[3]);
+        }
 
-            Answer3Button.Content = question.Answers[2];
-            Answer3Button.Tag = 3;
-
-            Answer4Button.Content = question.Answers[3];
-            Answer4Button.Tag = 4;
+        private void SetButtonContent(Button button, Image image, string answerText, string imagePath)
+        {
+            if (!string.IsNullOrEmpty(imagePath) && System.IO.File.Exists(imagePath))
+            {
+                image.Source = new BitmapImage(new Uri(imagePath, UriKind.Absolute));
+                image.Visibility = Visibility.Visible;
+                button.Content = image; // Кнопка отображает изображение
+            }
+            else if (!string.IsNullOrEmpty(answerText))
+            {
+                image.Visibility = Visibility.Collapsed; // Скрываем изображение
+                button.Content = answerText; // Кнопка отображает текст
+            }
+            else
+            {
+                image.Visibility = Visibility.Collapsed;
+                button.Content = string.Empty;
+            }
         }
 
 
@@ -59,13 +92,11 @@ namespace kursach_wpf
                 return;
             }
 
-            // Проверяем, соответствует ли выбранный ответ правильному.
             var isCorrect = selectedAnswer == _questions[_currentQuestionIndex].CorrectAnswer;
 
-            // Сохраняем результат в базе данных.
+            // Сохраняем результат в базе данных, обновляя старый
             DatabaseHelper.SaveResult(_userId, _quizId, _questions[_currentQuestionIndex].Id, isCorrect);
 
-            // Показываем результат пользователю.
             MessageBox.Show(
                 isCorrect ? "Правильно!" : "Неправильно!",
                 "Результат",
@@ -73,11 +104,8 @@ namespace kursach_wpf
                 isCorrect ? MessageBoxImage.Information : MessageBoxImage.Error
             );
 
-            // Переходим к следующему вопросу.
-            _currentQuestionIndex++;
-            LoadQuestion();
+            // Завершаем текущий квиз
+            Close();
         }
-
-
     }
 }

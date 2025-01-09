@@ -30,10 +30,10 @@
         <TextBlock Text="Select a Quiz" FontSize="36" Foreground="White" VerticalAlignment="Top" Margin="20" />
 
         <UniformGrid x:Name="QuizGrid" Columns="2" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="50">
-            <Button Content="Quiz 1" Click="QuizButton_Click" Tag="1" />
-            <Button Content="Quiz 2" Click="QuizButton_Click" Tag="2" />
-            <Button Content="Quiz 3" Click="QuizButton_Click" Tag="3" />
-            <Button Content="Quiz 4" Click="QuizButton_Click" Tag="4" />
+            <Button Content="Quiz 1" Foreground="Black" Click="QuizButton_Click" Tag="1" />
+            <Button Content="Quiz 2" Foreground="Black" Click="QuizButton_Click" Tag="2" />
+            <Button Content="Quiz 3" Foreground="Black" Click="QuizButton_Click" Tag="3" />
+            <Button Content="Quiz 4" Foreground="Black" Click="QuizButton_Click" Tag="4" />
         </UniformGrid>
     </Grid>
 </Window>

@@ -18,11 +18,26 @@ namespace kursach_wpf
 
         private void QuizButton_Click(object sender, RoutedEventArgs e)
         {
-            var button = sender as FrameworkElement;
-            var quizId = int.Parse(button.Tag.ToString());
-            var quizWindow = new QuizWindow(quizId, _userId);
-            quizWindow.ShowDialog();
-            UpdateButtonStatus(); // Обновляем кнопки после завершения викторины.
+            try
+            {
+                var button = sender as FrameworkElement;
+                if (button?.Tag == null || !int.TryParse(button.Tag.ToString(), out int quizId))
+                {
+                    MessageBox.Show("Ошибка запуска квиза. Попробуйте снова.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                var quizWindow = new QuizWindow(quizId, _userId);
+                quizWindow.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Произошла ошибка: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                UpdateButtonStatus(); // Убедимся, что кнопки обновятся корректно.
+            }
         }
 
         private void UpdateButtonStatus()
@@ -34,11 +49,12 @@ namespace kursach_wpf
                     var quizId = int.Parse(button.Tag.ToString());
                     var result = DatabaseHelper.GetQuizResult(_userId, quizId);
 
+                    // Меняем цвет кнопки в зависимости от результата
                     button.Background = result switch
                     {
-                        null => Brushes.White,
-                        0 => Brushes.Red,
-                        1 => Brushes.Green,
+                        null => Brushes.White,    // Не завершено
+                        0 => Brushes.Red,         // Неправильный ответ
+                        1 => Brushes.Green,       // Правильный ответ
                         _ => Brushes.White
                     };
                 }
