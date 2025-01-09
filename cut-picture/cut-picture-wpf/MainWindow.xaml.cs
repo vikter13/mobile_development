@@ -362,10 +362,7 @@ namespace ImageEditor
         {
             if (!_isDraggingRectangle) return;
 
-            // Получаем текущую точку мыши
             var currentPoint = e.GetPosition(SelectionCanvas);
-
-            // Находим смещение относительно начальной точки
             var offsetX = currentPoint.X - _dragStartPointForRectangle.X;
             var offsetY = currentPoint.Y - _dragStartPointForRectangle.Y;
 
@@ -375,17 +372,15 @@ namespace ImageEditor
                 double newLeft = Canvas.GetLeft(rectangle) + offsetX;
                 double newTop = Canvas.GetTop(rectangle) + offsetY;
 
-                // Ограничиваем перемещение прямоугольников в пределах Canvas
-                newLeft = Math.Max(0, Math.Min(newLeft, SelectionCanvas.ActualWidth - rectangle.Width));
-                newTop = Math.Max(0, Math.Min(newTop, SelectionCanvas.ActualHeight - rectangle.Height));
-
+                // Убираем ограничения на перемещение прямоугольников
+                // Прямоугольники могут выходить за пределы изображения и канваса
                 Canvas.SetLeft(rectangle, newLeft);
                 Canvas.SetTop(rectangle, newTop);
             }
 
-            // Обновляем начальную точку для вычисления смещения
             _dragStartPointForRectangle = currentPoint;
         }
+
 
 
         private void SelectionRectangle_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -428,17 +423,19 @@ namespace ImageEditor
             var offsetX = currentPoint.X - _dragStartPoint.X;
             var offsetY = currentPoint.Y - _dragStartPoint.Y;
 
+            // Сетка может выходить за пределы канваса и изображения
             double newLeft = Canvas.GetLeft(_gridCanvas) + offsetX;
             double newTop = Canvas.GetTop(_gridCanvas) + offsetY;
 
-            newLeft = Math.Max(0, Math.Min(newLeft, SelectionCanvas.ActualWidth - _gridCanvas.Width));
-            newTop = Math.Max(0, Math.Min(newTop, SelectionCanvas.ActualHeight - _gridCanvas.Height));
-
+            // Убираем жесткие ограничения по границам изображения и канваса
+            // Просто двигаем сетку в пределах доступной области
             Canvas.SetLeft(_gridCanvas, newLeft);
             Canvas.SetTop(_gridCanvas, newTop);
 
             _dragStartPoint = currentPoint;
         }
+
+
 
     }
 }
