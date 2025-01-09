@@ -80,6 +80,10 @@
               "target": "Package",
               "version": "[9.0.0, )",
               "autoReferenced": true
+            },
+            "SkiaSharp": {
+              "target": "Package",
+              "version": "[3.116.1, )"
             }
           },
           "imports": [
@@ -119,6 +123,10 @@
               "target": "Package",
               "version": "[9.0.0, )",
               "autoReferenced": true
+            },
+            "SkiaSharp": {
+              "target": "Package",
+              "version": "[3.116.1, )"
             }
           },
           "imports": [
@@ -158,6 +166,10 @@
               "target": "Package",
               "version": "[9.0.0, )",
               "autoReferenced": true
+            },
+            "SkiaSharp": {
+              "target": "Package",
+              "version": "[3.116.1, )"
             }
           },
           "imports": [
@@ -192,6 +204,10 @@
             "Microsoft.Maui.Controls": {
               "target": "Package",
               "version": "[9.0.0, )"
+            },
+            "SkiaSharp": {
+              "target": "Package",
+              "version": "[3.116.1, )"
             }
           },
           "imports": [

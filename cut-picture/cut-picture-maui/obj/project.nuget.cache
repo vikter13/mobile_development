@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "BZPbciMd/3g=",
+  "dgSpecHash": "4wiY1k0Kq7A=",
   "success": true,
   "projectFilePath": "C:\\stud-folder\\mobile_development\\cut-picture\\cut-picture-maui\\cut-picture-maui.csproj",
   "expectedPackageFiles": [
@@ -29,6 +29,11 @@
     "C:\\Users\\victor\\.nuget\\packages\\microsoft.web.webview2\\1.0.2792.45\\microsoft.web.webview2.1.0.2792.45.nupkg.sha512",
     "C:\\Users\\victor\\.nuget\\packages\\microsoft.windows.sdk.buildtools\\10.0.22621.756\\microsoft.windows.sdk.buildtools.10.0.22621.756.nupkg.sha512",
     "C:\\Users\\victor\\.nuget\\packages\\microsoft.windowsappsdk\\1.6.240923002\\microsoft.windowsappsdk.1.6.240923002.nupkg.sha512",
+    "C:\\Users\\victor\\.nuget\\packages\\skiasharp\\3.116.1\\skiasharp.3.116.1.nupkg.sha512",
+    "C:\\Users\\victor\\.nuget\\packages\\skiasharp.nativeassets.android\\3.116.1\\skiasharp.nativeassets.android.3.116.1.nupkg.sha512",
+    "C:\\Users\\victor\\.nuget\\packages\\skiasharp.nativeassets.ios\\3.116.1\\skiasharp.nativeassets.ios.3.116.1.nupkg.sha512",
+    "C:\\Users\\victor\\.nuget\\packages\\skiasharp.nativeassets.maccatalyst\\3.116.1\\skiasharp.nativeassets.maccatalyst.3.116.1.nupkg.sha512",
+    "C:\\Users\\victor\\.nuget\\packages\\skiasharp.nativeassets.win32\\3.116.1\\skiasharp.nativeassets.win32.3.116.1.nupkg.sha512",
     "C:\\Users\\victor\\.nuget\\packages\\xamarin.android.glide\\4.16.0.6\\xamarin.android.glide.4.16.0.6.nupkg.sha512",
     "C:\\Users\\victor\\.nuget\\packages\\xamarin.android.glide.annotations\\4.16.0.6\\xamarin.android.glide.annotations.4.16.0.6.nupkg.sha512",
     "C:\\Users\\victor\\.nuget\\packages\\xamarin.android.glide.disklrucache\\4.16.0.6\\xamarin.android.glide.disklrucache.4.16.0.6.nupkg.sha512",

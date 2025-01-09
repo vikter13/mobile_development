@@ -133,7 +133,6 @@ namespace ImageEditor
             CreateSelectionGrid();
         }
 
-
         private void SaveAreasButton_Click(object sender, RoutedEventArgs e)
         {
             if (_imageHandler.GetImage() == null || _selectionRectangles.Count == 0)
@@ -156,32 +155,26 @@ namespace ImageEditor
                     var baseFileName = System.IO.Path.GetFileNameWithoutExtension(dialog.FileName);
                     var index = 1;
 
-                    // Получаем изображение
                     var image = _imageHandler.GetImage();
 
-                    // Перебираем все прямоугольники и сохраняем каждую область
                     foreach (var rect in _selectionRectangles)
                     {
-                        // Получаем координаты и размеры прямоугольника на канвасе
                         var left = Canvas.GetLeft(rect);
                         var top = Canvas.GetTop(rect);
                         var width = rect.Width;
                         var height = rect.Height;
 
-                        // Проверка на корректность размеров
-                        if (width <= 0 || height <= 0) continue; // Пропускаем пустые области
+                        if (width <= 0 || height <= 0) continue;
 
-                        // Создаем объект Rectangle для обрезки с координатами относительно изображения
                         var cropRect = new System.Drawing.Rectangle(
-                            (int)left,    // X-координата
-                            (int)top,     // Y-координата
-                            (int)width,   // Ширина
-                            (int)height   // Высота
+                            (int)left,
+                            (int)top,
+                            (int)width,
+                            (int)height
                         );
 
                         using (var croppedImage = _imageHandler.CropImage(cropRect))
                         {
-                            // Сохранение изображения в файл
                             string fileName = System.IO.Path.Combine(baseFolder!, $"{baseFileName}_{index}.png");
                             croppedImage.Save(fileName, ImageFormat.Png);
                             index++;
@@ -196,8 +189,6 @@ namespace ImageEditor
                 }
             }
         }
-
-
 
         private Bitmap RotateImage(Bitmap image, float angle)
         {
@@ -272,9 +263,9 @@ namespace ImageEditor
                     UpdateImageInfo();
                     CreateSelectionGrid();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    MessageBox.Show($"Ошибка загрузки изображения: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+
                 }
             }
         }
@@ -303,6 +294,7 @@ namespace ImageEditor
             var size = _imageHandler.GetImageSize();
             ImageInfoTextBlock.Text = $"Размер изображения: {size.Width}x{size.Height}\nМасштаб: {_currentScale:P0}";
         }
+
         private void RotationSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             if (e.NewValue != e.OldValue)
@@ -350,7 +342,6 @@ namespace ImageEditor
                     _gridCanvas.Children.Add(rect);
                     _selectionRectangles.Add(rect);
 
-                    // Добавляем обработчики событий для перетаскивания каждого прямоугольника
                     rect.MouseLeftButtonDown += SelectionRectangle_MouseLeftButtonDown;
                     rect.MouseLeftButtonUp += SelectionRectangle_MouseLeftButtonUp;
                     rect.MouseMove += SelectionRectangle_MouseMove;
@@ -366,14 +357,11 @@ namespace ImageEditor
             var offsetX = currentPoint.X - _dragStartPointForRectangle.X;
             var offsetY = currentPoint.Y - _dragStartPointForRectangle.Y;
 
-            // Перемещаем все прямоугольники
             foreach (var rectangle in _selectionRectangles)
             {
                 double newLeft = Canvas.GetLeft(rectangle) + offsetX;
                 double newTop = Canvas.GetTop(rectangle) + offsetY;
 
-                // Убираем ограничения на перемещение прямоугольников
-                // Прямоугольники могут выходить за пределы изображения и канваса
                 Canvas.SetLeft(rectangle, newLeft);
                 Canvas.SetTop(rectangle, newTop);
             }
@@ -381,39 +369,30 @@ namespace ImageEditor
             _dragStartPointForRectangle = currentPoint;
         }
 
-
-
         private void SelectionRectangle_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             var rect = sender as Rectangle;
             if (rect == null) return;
 
-            // Запоминаем начальную точку перетаскивания
             _dragStartPointForRectangle = e.GetPosition(SelectionCanvas);
 
-            // Устанавливаем флаг, что перетаскивание начато
             _isDraggingRectangle = true;
 
-            // Удерживаем захват мыши на всех прямоугольниках
             foreach (var rectangle in _selectionRectangles)
             {
                 rectangle.CaptureMouse();
             }
         }
 
-
         private void SelectionRectangle_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             _isDraggingRectangle = false;
 
-            // Освобождаем захват всех прямоугольников
             foreach (var rectangle in _selectionRectangles)
             {
                 rectangle.ReleaseMouseCapture();
             }
         }
-
-
 
         private void GridCanvas_MouseMove(object sender, MouseEventArgs e)
         {
@@ -423,19 +402,13 @@ namespace ImageEditor
             var offsetX = currentPoint.X - _dragStartPoint.X;
             var offsetY = currentPoint.Y - _dragStartPoint.Y;
 
-            // Сетка может выходить за пределы канваса и изображения
             double newLeft = Canvas.GetLeft(_gridCanvas) + offsetX;
             double newTop = Canvas.GetTop(_gridCanvas) + offsetY;
 
-            // Убираем жесткие ограничения по границам изображения и канваса
-            // Просто двигаем сетку в пределах доступной области
             Canvas.SetLeft(_gridCanvas, newLeft);
             Canvas.SetTop(_gridCanvas, newTop);
 
             _dragStartPoint = currentPoint;
         }
-
-
-
     }
 }

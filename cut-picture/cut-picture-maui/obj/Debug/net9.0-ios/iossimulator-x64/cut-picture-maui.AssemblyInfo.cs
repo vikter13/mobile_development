@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("cut-picture-maui")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+53eb1fa7939ace1891bf9ec7ea5f623a1f2c4735")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+75de3efb17443dfdaf928e1b84b1dd92ab2b1ae1")]
 [assembly: System.Reflection.AssemblyProductAttribute("cut-picture-maui")]
 [assembly: System.Reflection.AssemblyTitleAttribute("cut-picture-maui")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
