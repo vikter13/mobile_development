@@ -29,6 +29,29 @@ namespace ImageEditor
             InitializeComponent();
             InitializeUI();
             SetupZoomHandler();
+            SelectionCanvas.Drawable = new GraphicsDrawable(OnCanvasDraw);
+            MainImage.SizeChanged += (s, e) =>
+            {
+                if (_currentBitmap != null)
+                {
+                    UpdateSelectionGrid();
+                }
+            };
+        }
+
+        private class GraphicsDrawable : IDrawable
+        {
+            private readonly Action<ICanvas> _drawAction;
+
+            public GraphicsDrawable(Action<ICanvas> drawAction)
+            {
+                _drawAction = drawAction;
+            }
+
+            public void Draw(ICanvas canvas, RectF dirtyRect)
+            {
+                _drawAction(canvas);
+            }
         }
 
         private void InitializeUI()
@@ -43,7 +66,6 @@ namespace ImageEditor
             HorizontalPaddingPicker.SelectedItem = _horizontalPadding;
             VerticalPaddingPicker.SelectedItem = _verticalPadding;
 
-            // Add rotation slider value changed handler
             RotationSlider.ValueChanged += (s, e) =>
             {
                 _rotation = (float)e.NewValue;
@@ -55,17 +77,14 @@ namespace ImageEditor
 
         private void SetupZoomHandler()
         {
-            // Add pinch gesture recognizer for zoom
             var pinchGesture = new PinchGestureRecognizer();
             pinchGesture.PinchUpdated += (s, e) =>
             {
                 switch (e.Status)
                 {
                     case GestureStatus.Started:
-                        // Store the current scale when the gesture begins
                         break;
                     case GestureStatus.Running:
-                        // Update the scale based on the gesture
                         _zoom = Math.Max(0.1f, Math.Min(5.0f, _zoom * (float)e.Scale));
                         MainImage.Scale = _zoom;
                         SelectionCanvas.Scale = _zoom;
@@ -115,11 +134,23 @@ namespace ImageEditor
 
             _selectionRectangles.Clear();
 
-            float imageWidth = _currentBitmap.Width;
-            float imageHeight = _currentBitmap.Height;
+            var imageView = MainImage;
+            var imageAspect = (float)_currentBitmap.Width / _currentBitmap.Height;
 
-            float cellWidth = (imageWidth - (_columns + 1) * _horizontalPadding) / _columns;
-            float cellHeight = (imageHeight - (_rows + 1) * _verticalPadding) / _rows;
+            float viewWidth = (float)imageView.Width;
+            float viewHeight = (float)imageView.Height;
+
+            if (viewWidth / viewHeight > imageAspect)
+            {
+                viewWidth = viewHeight * imageAspect;
+            }
+            else
+            {
+                viewHeight = viewWidth / imageAspect;
+            }
+
+            float cellWidth = (viewWidth - (_columns + 1) * _horizontalPadding) / _columns;
+            float cellHeight = (viewHeight - (_rows + 1) * _verticalPadding) / _rows;
 
             for (int row = 0; row < _rows; row++)
             {
@@ -135,8 +166,7 @@ namespace ImageEditor
             SelectionCanvas.Invalidate();
         }
 
-
-        private void OnCanvasDraw(object sender, ICanvas canvas)
+        private void OnCanvasDraw(ICanvas canvas)
         {
             if (_currentBitmap == null || _selectionRectangles.Count == 0)
                 return;
@@ -188,23 +218,23 @@ namespace ImageEditor
             }
         }
 
-        private SKBitmap CropImage(SKBitmap source, RectangleF rect)
+        private SKBitmap CropImage(SKBitmap source, RectangleF viewRect)
         {
-            // Создаем новый битмап для обрезанного изображения
+            float scaleX = (float)source.Width / (float)MainImage.Width;
+            float scaleY = (float)source.Height / (float)MainImage.Height;
+
             SKRectI cropRect = new SKRectI(
-                (int)rect.X,
-                (int)rect.Y,
-                (int)(rect.X + rect.Width),
-                (int)(rect.Y + rect.Height)
+                (int)(viewRect.X * scaleX),
+                (int)(viewRect.Y * scaleY),
+                (int)((viewRect.X + viewRect.Width) * scaleX),
+                (int)((viewRect.Y + viewRect.Height) * scaleY)
             );
 
-            // Проверяем границы
             cropRect.Left = Math.Max(0, cropRect.Left);
             cropRect.Top = Math.Max(0, cropRect.Top);
             cropRect.Right = Math.Min(source.Width, cropRect.Right);
             cropRect.Bottom = Math.Min(source.Height, cropRect.Bottom);
 
-            // Создаем новый битмап и копируем в него область
             var croppedBitmap = new SKBitmap(cropRect.Width, cropRect.Height);
             source.ExtractSubset(croppedBitmap, cropRect);
 

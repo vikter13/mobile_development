@@ -36,7 +36,9 @@
             <Grid x:Name="ImageGrid" Padding="10">
                 <Image x:Name="MainImage" Aspect="AspectFit"/>
                 <GraphicsView x:Name="SelectionCanvas" 
-                             InputTransparent="True"/>
+             InputTransparent="True"
+             HeightRequest="{Binding Source={x:Reference MainImage}, Path=Height}"
+             WidthRequest="{Binding Source={x:Reference MainImage}, Path=Width}"/>
             </Grid>
         </ScrollView>
     </Grid>
