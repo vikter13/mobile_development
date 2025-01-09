@@ -10,140 +10,138 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-
 namespace ImageEditor
 {
     public partial class MainPage : ContentPage
     {
         private List<RectangleF> _selectionRectangles = new();
+        private string _currentImagePath;
+        private SKBitmap _currentBitmap;
         private int _rows = 2;
         private int _columns = 3;
         private int _horizontalPadding = 10;
         private int _verticalPadding = 10;
-        private string _currentImagePath;
-        private ImageSource _currentImage;
+        private float _zoom = 1.0f;
+        private float _rotation = 0.0f;
 
         public MainPage()
         {
             InitializeComponent();
-            InitializeComboBoxes();
+            InitializeUI();
+            SetupZoomHandler();
         }
 
-        private void InitializeComboBoxes()
+        private void InitializeUI()
         {
             RowsPicker.ItemsSource = Enumerable.Range(1, 10).ToList();
             ColumnsPicker.ItemsSource = Enumerable.Range(1, 10).ToList();
-            HorizontalPaddingPicker.ItemsSource = Enumerable.Range(0, 50).ToList();
-            VerticalPaddingPicker.ItemsSource = Enumerable.Range(0, 50).ToList();
+            HorizontalPaddingPicker.ItemsSource = Enumerable.Range(0, 100).ToList();
+            VerticalPaddingPicker.ItemsSource = Enumerable.Range(0, 100).ToList();
 
             RowsPicker.SelectedItem = _rows;
             ColumnsPicker.SelectedItem = _columns;
             HorizontalPaddingPicker.SelectedItem = _horizontalPadding;
             VerticalPaddingPicker.SelectedItem = _verticalPadding;
+
+            // Add rotation slider value changed handler
+            RotationSlider.ValueChanged += (s, e) =>
+            {
+                _rotation = (float)e.NewValue;
+                MainImage.Rotation = _rotation;
+                SelectionCanvas.Rotation = _rotation;
+                UpdateSelectionGrid();
+            };
+        }
+
+        private void SetupZoomHandler()
+        {
+            // Add pinch gesture recognizer for zoom
+            var pinchGesture = new PinchGestureRecognizer();
+            pinchGesture.PinchUpdated += (s, e) =>
+            {
+                switch (e.Status)
+                {
+                    case GestureStatus.Started:
+                        // Store the current scale when the gesture begins
+                        break;
+                    case GestureStatus.Running:
+                        // Update the scale based on the gesture
+                        _zoom = Math.Max(0.1f, Math.Min(5.0f, _zoom * (float)e.Scale));
+                        MainImage.Scale = _zoom;
+                        SelectionCanvas.Scale = _zoom;
+                        break;
+                }
+            };
+
+            ImageGrid.GestureRecognizers.Add(pinchGesture);
         }
 
         private async void OnLoadImageButtonClicked(object sender, EventArgs e)
         {
             try
             {
-                var file = await FilePicker.PickAsync();
-                if (file != null)
+                var result = await FilePicker.PickAsync(new PickOptions
                 {
-                    _currentImagePath = file.FullPath; // Здесь переменная получает значение
-                    _currentImage = ImageSource.FromFile(_currentImagePath);
-                    MainImage.Source = _currentImage;
+                    PickerTitle = "Выберите изображение",
+                    FileTypes = FilePickerFileType.Images
+                });
 
-                    // Загружаем изображение в SKBitmap
-                    using (var fileStream = File.OpenRead(_currentImagePath))
+                if (result != null)
+                {
+                    _currentImagePath = result.FullPath;
+
+                    using (var stream = await result.OpenReadAsync())
                     {
-                        var bitmap = SKBitmap.Decode(fileStream);
+                        _currentBitmap = SKBitmap.Decode(stream);
+                        MainImage.Source = ImageSource.FromFile(_currentImagePath);
 
-                        // Создаем сетку после загрузки изображения
-                        CreateSelectionGrid(bitmap); // Передаем bitmap в метод
+                        await DisplayAlert("Информация о изображении",
+                            $"Размер: {_currentBitmap.Width}x{_currentBitmap.Height}\n" +
+                            $"Формат: {Path.GetExtension(_currentImagePath)}", "OK");
+
+                        UpdateSelectionGrid();
                     }
                 }
             }
             catch (Exception ex)
             {
-                await DisplayAlert("Error", ex.Message, "OK");
+                await DisplayAlert("Ошибка", ex.Message, "OK");
             }
         }
 
-
-        private void CreateSelectionGrid(SKBitmap bitmap)
+        private void UpdateSelectionGrid()
         {
-            if (bitmap == null)
-            {
-                DisplayAlert("Warning", "Load an image first.", "OK");
-                return;
-            }
+            if (_currentBitmap == null) return;
 
             _selectionRectangles.Clear();
 
-            float canvasWidth = bitmap.Width;
-            float canvasHeight = bitmap.Height;
+            float imageWidth = _currentBitmap.Width;
+            float imageHeight = _currentBitmap.Height;
 
-            // Определяем количество колонок и строк в зависимости от размеров изображения
-            int columns = Math.Max(1, (int)(canvasWidth / 100));  // 100px ширина ячейки
-            int rows = Math.Max(1, (int)(canvasHeight / 100));    // 100px высота ячейки
+            float cellWidth = (imageWidth - (_columns + 1) * _horizontalPadding) / _columns;
+            float cellHeight = (imageHeight - (_rows + 1) * _verticalPadding) / _rows;
 
-            float cellWidth = canvasWidth / columns;
-            float cellHeight = canvasHeight / rows;
-
-            for (int row = 0; row < rows; row++)
+            for (int row = 0; row < _rows; row++)
             {
-                for (int col = 0; col < columns; col++)
+                for (int col = 0; col < _columns; col++)
                 {
-                    float x = col * cellWidth;
-                    float y = row * cellHeight;
+                    float x = col * (cellWidth + _horizontalPadding) + _horizontalPadding;
+                    float y = row * (cellHeight + _verticalPadding) + _verticalPadding;
 
-                    var rect = new RectangleF(x, y, cellWidth, cellHeight);
-                    _selectionRectangles.Add(rect);
+                    _selectionRectangles.Add(new RectangleF(x, y, cellWidth, cellHeight));
                 }
             }
 
             SelectionCanvas.Invalidate();
         }
 
-        private async Task<SKBitmap> CropImageAsync(RectangleF rect, SKBitmap bitmap)
+
+        private void OnCanvasDraw(object sender, ICanvas canvas)
         {
-            if (bitmap == null)
-            {
-                throw new InvalidOperationException("Image is not loaded properly.");
-            }
-
-            // Преобразуем координаты в целые числа
-            int left = (int)rect.Left;
-            int top = (int)rect.Top;
-            int right = (int)rect.Right;
-            int bottom = (int)rect.Bottom;
-
-            // Проверяем, что прямоугольник в пределах изображения
-            if (left < 0 || top < 0 || right > bitmap.Width || bottom > bitmap.Height)
-            {
-                // Корректируем координаты, если они выходят за пределы изображения
-                left = Math.Max(0, left);
-                top = Math.Max(0, top);
-                right = Math.Min(bitmap.Width, right);
-                bottom = Math.Min(bitmap.Height, bottom);
-            }
-
-            // Обрезаем изображение
-            var cropRect = new SKRectI(left, top, right, bottom);
-            var croppedBitmap = new SKBitmap(cropRect.Width, cropRect.Height);
-            bitmap.ExtractSubset(croppedBitmap, cropRect);
-
-            return croppedBitmap;
-        }
-
-
-
-        private void OnCanvasDraw(ICanvas canvas, RectF dirtyRect)
-        {
-            if (_selectionRectangles.Count == 0)
+            if (_currentBitmap == null || _selectionRectangles.Count == 0)
                 return;
 
-            canvas.StrokeColor = Colors.Black;
+            canvas.StrokeColor = Colors.Red;
             canvas.StrokeSize = 2;
 
             foreach (var rect in _selectionRectangles)
@@ -152,182 +150,110 @@ namespace ImageEditor
             }
         }
 
-
-
-
-
-        // Пример метода сохранения файла
-        private async Task<string> SaveFileAsync(string suggestedFileName)
+        private async void OnSaveAreasButtonClicked(object sender, EventArgs e)
         {
-            string filePath = "C:\\Users\\victor\\Downloads\\images-folder";
-
-            try
+            if (_currentBitmap == null || _selectionRectangles.Count == 0)
             {
-                // Для мобильных платформ (Android, iOS) можно использовать конкретные папки:
-                // Пример использования "Документы" на Android или iOS
-                filePath = Path.Combine(FileSystem.AppDataDirectory, suggestedFileName);
-
-                // Если хотите указать пользовательский путь для Windows/Mac, можно сделать так:
-                // Пример для Windows: C:\Users\Username\Documents
-                if (DeviceInfo.Platform == DevicePlatform.WinUI || DeviceInfo.Platform == DevicePlatform.MacCatalyst)
-                {
-                    filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), suggestedFileName);
-                }
-
-                // Для других платформ можно указать статические пути, например, для загрузок или общего хранилища
-                // Если это нужно, добавьте дополнительные проверки для других платформ.
-
-                return filePath;
-            }
-            catch (Exception ex)
-            {
-                // Тут можно ловить ошибку, если в мобильных приложениях сохранение не поддерживается
-                await DisplayAlert("Error", "Error saving file: " + ex.Message, "OK");
-            }
-
-            return filePath;
-        }
-
-
-
-        private async void OnCropImageButtonClicked(object sender, EventArgs e)
-        {
-            if (string.IsNullOrEmpty(_currentImagePath) || _selectionRectangles.Count == 0)
-            {
-                await DisplayAlert("Error", "Load an image and create a grid first.", "OK");
+                await DisplayAlert("Ошибка", "Сначала загрузите изображение и создайте сетку", "OK");
                 return;
             }
 
             try
             {
-                // Выбираем первый прямоугольник для обрезки
-                var rect = _selectionRectangles.First(); // Используем первый прямоугольник
+                string basePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures), "ImageEditor");
+                Directory.CreateDirectory(basePath);
 
-                // Загружаем изображение
-                using (var fileStream = File.OpenRead(_currentImagePath))
-                {
-                    var bitmap = SKBitmap.Decode(fileStream);
-                    var croppedImage = await CropImageAsync(rect, bitmap); // Передаем rect и bitmap
-
-                    if (croppedImage == null)
-                    {
-                        await DisplayAlert("Error", "Image cropping failed.", "OK");
-                        return;
-                    }
-
-                    var filePath = Path.Combine(FileSystem.AppDataDirectory, "cropped_image.png");
-
-                    // Сохраняем обрезанное изображение
-                    using (var stream = File.Create(filePath))
-                    {
-                        croppedImage.Encode(stream, SKEncodedImageFormat.Png, 100);
-                    }
-
-                    await DisplayAlert("Success", $"Image saved to {filePath}", "OK");
-                }
-            }
-            catch (Exception ex)
-            {
-                await DisplayAlert("Error", ex.Message, "OK");
-            }
-        }
-
-        private async void OnSaveAreasButtonClicked(object sender, EventArgs e)
-        {
-            try
-            {
-                // Проверяем, есть ли прямоугольники
-                if (_selectionRectangles.Count == 0)
-                {
-                    await DisplayAlert("Error", "No areas to save.", "OK");
-                    return;
-                }
-
-                if (string.IsNullOrEmpty(_currentImagePath))
-                {
-                    await DisplayAlert("Error", "No image loaded.", "OK");
-                    return;
-                }
-
-                // Загружаем исходное изображение
-                using (var fileStream = File.OpenRead(_currentImagePath))
-                {
-                    var bitmap = SKBitmap.Decode(fileStream);
-
-                    // Создаем новое изображение с прямоугольниками
-                    var resultBitmap = DrawRectanglesOnImage(bitmap);
-
-                    // Сохраняем результат
-                    var filePath = Path.Combine(FileSystem.AppDataDirectory, "image_with_areas.png");
-                    using (var stream = File.Create(filePath))
-                    {
-                        resultBitmap.Encode(stream, SKEncodedImageFormat.Png, 100);
-                    }
-
-                    await DisplayAlert("Success", $"Image saved to {filePath}", "OK");
-                }
-            }
-            catch (Exception ex)
-            {
-                await DisplayAlert("Error", ex.Message, "OK");
-            }
-        }
-
-        private SKBitmap DrawRectanglesOnImage(SKBitmap bitmap)
-        {
-            // Создаем новый объект SKCanvas для рисования на изображении
-            var resultBitmap = new SKBitmap(bitmap.Width, bitmap.Height);
-            using (var canvas = new SKCanvas(resultBitmap))
-            {
-                // Рисуем исходное изображение
-                canvas.DrawBitmap(bitmap, 0, 0);
-
-                // Настройки для рисования прямоугольников
-                var paint = new SKPaint
-                {
-                    Color = SKColors.Red.WithAlpha(128), // Полупрозрачный красный цвет
-                    Style = SKPaintStyle.Stroke,
-                    StrokeWidth = 3
-                };
-
-                // Рисуем все прямоугольники
+                int areaIndex = 1;
                 foreach (var rect in _selectionRectangles)
                 {
-                    var skRect = new SKRect(rect.Left, rect.Top, rect.Right, rect.Bottom);
-                    canvas.DrawRect(skRect, paint);
-                }
-            }
+                    var croppedBitmap = CropImage(_currentBitmap, rect);
+                    if (croppedBitmap != null)
+                    {
+                        string fileName = $"area_{areaIndex}_{DateTime.Now:yyyyMMdd_HHmmss}.png";
+                        string fullPath = Path.Combine(basePath, fileName);
 
-            return resultBitmap;
+                        using (var fileStream = File.OpenWrite(fullPath))
+                        {
+                            croppedBitmap.Encode(SKEncodedImageFormat.Png, 100).SaveTo(fileStream);
+                        }
+                        areaIndex++;
+                    }
+                }
+
+                await DisplayAlert("Успех", $"Сохранено {_selectionRectangles.Count} областей в папку {basePath}", "OK");
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Ошибка", ex.Message, "OK");
+            }
         }
 
+        private SKBitmap CropImage(SKBitmap source, RectangleF rect)
+        {
+            // Создаем новый битмап для обрезанного изображения
+            SKRectI cropRect = new SKRectI(
+                (int)rect.X,
+                (int)rect.Y,
+                (int)(rect.X + rect.Width),
+                (int)(rect.Y + rect.Height)
+            );
 
+            // Проверяем границы
+            cropRect.Left = Math.Max(0, cropRect.Left);
+            cropRect.Top = Math.Max(0, cropRect.Top);
+            cropRect.Right = Math.Min(source.Width, cropRect.Right);
+            cropRect.Bottom = Math.Min(source.Height, cropRect.Bottom);
 
+            // Создаем новый битмап и копируем в него область
+            var croppedBitmap = new SKBitmap(cropRect.Width, cropRect.Height);
+            source.ExtractSubset(croppedBitmap, cropRect);
 
+            return croppedBitmap;
+        }
 
+        private void OnGridSettingsChanged(object sender, EventArgs e)
+        {
+            if (sender is Picker picker)
+            {
+                if (picker.SelectedItem is int value)
+                {
+                    if (picker == RowsPicker)
+                        _rows = value;
+                    else if (picker == ColumnsPicker)
+                        _columns = value;
+                    else if (picker == HorizontalPaddingPicker)
+                        _horizontalPadding = value;
+                    else if (picker == VerticalPaddingPicker)
+                        _verticalPadding = value;
 
+                    UpdateSelectionGrid();
+                }
+            }
+        }
 
         private async void OnSaveSettingsButtonClicked(object sender, EventArgs e)
         {
             try
             {
-                var settings = new
+                var settings = new Settings
                 {
                     Rows = _rows,
                     Columns = _columns,
                     HorizontalPadding = _horizontalPadding,
-                    VerticalPadding = _verticalPadding
+                    VerticalPadding = _verticalPadding,
+                    Zoom = _zoom,
+                    Rotation = _rotation
                 };
 
-                var json = JsonSerializer.Serialize(settings);
-                var filePath = Path.Combine(FileSystem.AppDataDirectory, "settings.json");
-                await File.WriteAllTextAsync(filePath, json);
+                string json = JsonSerializer.Serialize(settings);
+                string path = Path.Combine(FileSystem.AppDataDirectory, "settings.json");
+                await File.WriteAllTextAsync(path, json);
 
-                await DisplayAlert("Success", "Settings saved successfully!", "OK");
+                await DisplayAlert("Успех", "Настройки сохранены", "OK");
             }
             catch (Exception ex)
             {
-                await DisplayAlert("Error", ex.Message, "OK");
+                await DisplayAlert("Ошибка", ex.Message, "OK");
             }
         }
 
@@ -335,16 +261,15 @@ namespace ImageEditor
         {
             try
             {
-                var filePath = Path.Combine(FileSystem.AppDataDirectory, "settings.json");
-
-                if (!File.Exists(filePath))
+                string path = Path.Combine(FileSystem.AppDataDirectory, "settings.json");
+                if (!File.Exists(path))
                 {
-                    await DisplayAlert("Error", "No saved settings found.", "OK");
+                    await DisplayAlert("Ошибка", "Файл настроек не найден", "OK");
                     return;
                 }
 
-                var json = await File.ReadAllTextAsync(filePath);
-                var settings = JsonSerializer.Deserialize<Settings>(json); // Десериализация в объект Settings
+                string json = await File.ReadAllTextAsync(path);
+                var settings = JsonSerializer.Deserialize<Settings>(json);
 
                 if (settings != null)
                 {
@@ -352,76 +277,27 @@ namespace ImageEditor
                     _columns = settings.Columns;
                     _horizontalPadding = settings.HorizontalPadding;
                     _verticalPadding = settings.VerticalPadding;
+                    _zoom = settings.Zoom;
+                    _rotation = settings.Rotation;
 
                     RowsPicker.SelectedItem = _rows;
                     ColumnsPicker.SelectedItem = _columns;
                     HorizontalPaddingPicker.SelectedItem = _horizontalPadding;
                     VerticalPaddingPicker.SelectedItem = _verticalPadding;
 
-                    // Проверка, если изображение не загружено, то загружаем его
-                    if (!string.IsNullOrEmpty(_currentImagePath))
-                    {
-                        using (var fileStream = File.OpenRead(_currentImagePath))
-                        {
-                            var bitmap = SKBitmap.Decode(fileStream);
-                            CreateSelectionGrid(bitmap);  // Передаем bitmap в метод
-                        }
-                    }
-                    else
-                    {
-                        await DisplayAlert("Error", "No image loaded. Please load an image first.", "OK");
-                    }
+                    MainImage.Scale = _zoom;
+                    MainImage.Rotation = _rotation;
+                    SelectionCanvas.Scale = _zoom;
+                    SelectionCanvas.Rotation = _rotation;
 
-                    await DisplayAlert("Success", "Settings loaded successfully!", "OK");
+                    UpdateSelectionGrid();
+                    await DisplayAlert("Успех", "Настройки загружены", "OK");
                 }
             }
             catch (Exception ex)
             {
-                await DisplayAlert("Error", ex.Message, "OK");
+                await DisplayAlert("Ошибка", ex.Message, "OK");
             }
-        }
-
-
-
-
-        private void OnGridSettingsChanged(object sender, EventArgs e)
-        {
-            if (RowsPicker.SelectedItem != null)
-                _rows = (int)RowsPicker.SelectedItem;
-
-            if (ColumnsPicker.SelectedItem != null)
-                _columns = (int)ColumnsPicker.SelectedItem;
-
-            if (HorizontalPaddingPicker.SelectedItem != null)
-                _horizontalPadding = (int)HorizontalPaddingPicker.SelectedItem;
-
-            if (VerticalPaddingPicker.SelectedItem != null)
-                _verticalPadding = (int)VerticalPaddingPicker.SelectedItem;
-
-            // Проверка на наличие загруженного изображения
-            if (!string.IsNullOrEmpty(_currentImagePath))
-            {
-                // Загружаем изображение, чтобы передать его в CreateSelectionGrid
-                using (var fileStream = File.OpenRead(_currentImagePath))
-                {
-                    var bitmap = SKBitmap.Decode(fileStream);
-                    CreateSelectionGrid(bitmap);  // Передаем bitmap в метод
-                }
-            }
-            else
-            {
-                DisplayAlert("Ошибка", "Изображение не загружено.", "OK");
-            }
-        }
-
-
-
-
-
-        private Microsoft.Maui.Graphics.IImage CropImage(RectangleF rect)
-        {
-            // Заглушка: Вернуть обрезанное изображение
-            return null; // Добавить код для обрезки изображения
         }
 
         public class Settings
@@ -430,8 +306,8 @@ namespace ImageEditor
             public int Columns { get; set; }
             public int HorizontalPadding { get; set; }
             public int VerticalPadding { get; set; }
+            public float Zoom { get; set; }
+            public float Rotation { get; set; }
         }
-
     }
 }
-
