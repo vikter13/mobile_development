@@ -84,6 +84,10 @@
             "SkiaSharp": {
               "target": "Package",
               "version": "[3.116.1, )"
+            },
+            "SkiaSharp.Views.Maui.Controls": {
+              "target": "Package",
+              "version": "[3.116.1, )"
             }
           },
           "imports": [
@@ -125,6 +129,10 @@
               "autoReferenced": true
             },
             "SkiaSharp": {
+              "target": "Package",
+              "version": "[3.116.1, )"
+            },
+            "SkiaSharp.Views.Maui.Controls": {
               "target": "Package",
               "version": "[3.116.1, )"
             }
@@ -170,6 +178,10 @@
             "SkiaSharp": {
               "target": "Package",
               "version": "[3.116.1, )"
+            },
+            "SkiaSharp.Views.Maui.Controls": {
+              "target": "Package",
+              "version": "[3.116.1, )"
             }
           },
           "imports": [
@@ -206,6 +218,10 @@
               "version": "[9.0.0, )"
             },
             "SkiaSharp": {
+              "target": "Package",
+              "version": "[3.116.1, )"
+            },
+            "SkiaSharp.Views.Maui.Controls": {
               "target": "Package",
               "version": "[3.116.1, )"
             }

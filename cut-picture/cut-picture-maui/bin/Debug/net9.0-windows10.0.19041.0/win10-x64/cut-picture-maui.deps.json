@@ -12,6 +12,7 @@
           "Microsoft.Extensions.Logging.Debug": "9.0.0",
           "Microsoft.Maui.Controls": "9.0.0",
           "SkiaSharp": "3.116.1",
+          "SkiaSharp.Views.Maui.Controls": "3.116.1",
           "Microsoft.Web.WebView2.Core.Projection": "1.0.2792.45",
           "runtimepack.Microsoft.Windows.SDK.NET.Ref": "10.0.19041.54"
         },
@@ -462,6 +463,75 @@
           }
         }
       },
+      "SkiaSharp.NativeAssets.WinUI/3.116.1": {
+        "runtime": {
+          "runtimes/win-x64/lib/net8.0-windows10.0.19041.0/SkiaSharp.Views.WinUI.Native.Projection.dll": {
+            "assemblyVersion": "3.116.0.0",
+            "fileVersion": "3.116.1.0"
+          }
+        },
+        "native": {
+          "runtimes/win-x64/native/SkiaSharp.Views.WinUI.Native.dll": {
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-x64/native/SkiaSharp.Views.WinUI.Native.winmd": {
+            "assemblyVersion": "255.255.255.255",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-x64/native/libEGL.dll": {
+            "fileVersion": "2.1.1.0"
+          },
+          "runtimes/win-x64/native/libGLESv2.dll": {
+            "fileVersion": "2.1.1.0"
+          }
+        }
+      },
+      "SkiaSharp.Views/3.116.1": {
+        "dependencies": {
+          "SkiaSharp": "3.116.1"
+        }
+      },
+      "SkiaSharp.Views.Maui.Controls/3.116.1": {
+        "dependencies": {
+          "Microsoft.Maui.Controls": "9.0.0",
+          "Microsoft.Maui.Core": "9.0.0",
+          "SkiaSharp": "3.116.1",
+          "SkiaSharp.Views.Maui.Core": "3.116.1"
+        },
+        "runtime": {
+          "lib/net8.0-windows10.0.19041/SkiaSharp.Views.Maui.Controls.dll": {
+            "assemblyVersion": "3.116.0.0",
+            "fileVersion": "3.116.1.0"
+          }
+        }
+      },
+      "SkiaSharp.Views.Maui.Core/3.116.1": {
+        "dependencies": {
+          "Microsoft.Maui.Core": "9.0.0",
+          "SkiaSharp": "3.116.1",
+          "SkiaSharp.Views": "3.116.1",
+          "SkiaSharp.Views.WinUI": "3.116.1"
+        },
+        "runtime": {
+          "lib/net8.0-windows10.0.19041/SkiaSharp.Views.Maui.Core.dll": {
+            "assemblyVersion": "3.116.0.0",
+            "fileVersion": "3.116.1.0"
+          }
+        }
+      },
+      "SkiaSharp.Views.WinUI/3.116.1": {
+        "dependencies": {
+          "Microsoft.WindowsAppSDK": "1.6.240923002",
+          "SkiaSharp": "3.116.1",
+          "SkiaSharp.NativeAssets.WinUI": "3.116.1"
+        },
+        "runtime": {
+          "lib/net8.0-windows10.0.19041/SkiaSharp.Views.Windows.dll": {
+            "assemblyVersion": "3.116.0.0",
+            "fileVersion": "3.116.1.0"
+          }
+        }
+      },
       "Microsoft.Web.WebView2.Core.Projection/1.0.2792.45": {
         "runtime": {
           "Microsoft.Web.WebView2.Core.Projection.dll": {
@@ -657,6 +727,41 @@
       "sha512": "sha512-dRQ75MCI8oz6zAs2Y1w6pq6ARs4MhdNG+gf3doOxOxdnueDXffQLGQIxON54GDoxc0WjKOoHMKBR4DhaduwwQw==",
       "path": "skiasharp.nativeassets.win32/3.116.1",
       "hashPath": "skiasharp.nativeassets.win32.3.116.1.nupkg.sha512"
+    },
+    "SkiaSharp.NativeAssets.WinUI/3.116.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-4C4f5zKkiLKdyg0Z8W8ggtNsucl5VxetyJBAlWcyj0LDSoa1StemXu81JtgaMJfNA1BB2kTiR1T14sIPnZAZqQ==",
+      "path": "skiasharp.nativeassets.winui/3.116.1",
+      "hashPath": "skiasharp.nativeassets.winui.3.116.1.nupkg.sha512"
+    },
+    "SkiaSharp.Views/3.116.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-76ovDiQHiKudqpJDJYf8FshNx5M2FKXd8E2ELliJJn2CEqQfy7VLUef4oH9JSgpA+ZgkV9nNlNPOV63C0znY6g==",
+      "path": "skiasharp.views/3.116.1",
+      "hashPath": "skiasharp.views.3.116.1.nupkg.sha512"
+    },
+    "SkiaSharp.Views.Maui.Controls/3.116.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-cUEiU0+PY6PQXdvVGbTBCxZD9R85o25ZHULFZ+muXdEuDmXI/iDvXYgldfLD5R9S7wDArnDCMIoep3A8TcCDWw==",
+      "path": "skiasharp.views.maui.controls/3.116.1",
+      "hashPath": "skiasharp.views.maui.controls.3.116.1.nupkg.sha512"
+    },
+    "SkiaSharp.Views.Maui.Core/3.116.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-eNTI5VH2sNpnkOPKEefRWHXlN+v2bFD+yZ4jimNQeL05uart2PaULOd9piLrHmBn6QQZmScAvJ0w8prlQJCzpQ==",
+      "path": "skiasharp.views.maui.core/3.116.1",
+      "hashPath": "skiasharp.views.maui.core.3.116.1.nupkg.sha512"
+    },
+    "SkiaSharp.Views.WinUI/3.116.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-KF4Hn0atdhFA2yXPk2Jzg0jZzDMYdhsbUpwLswAC2Vxai749GHFVdNkWsANxHl6fnJl7JaMm96WtGmFeg+FCFg==",
+      "path": "skiasharp.views.winui/3.116.1",
+      "hashPath": "skiasharp.views.winui.3.116.1.nupkg.sha512"
     },
     "Microsoft.Web.WebView2.Core.Projection/1.0.2792.45": {
       "type": "reference",

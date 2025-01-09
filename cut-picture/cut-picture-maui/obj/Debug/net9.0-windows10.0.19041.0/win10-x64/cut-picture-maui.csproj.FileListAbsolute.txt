@@ -472,3 +472,11 @@ C:\stud-folder\mobile_development\cut-picture\cut-picture-maui\obj\Debug\net9.0-
 C:\stud-folder\mobile_development\cut-picture\cut-picture-maui\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\qualifiers.txt
 C:\stud-folder\mobile_development\cut-picture\cut-picture-maui\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\qualifiers.txt.intermediate
 C:\stud-folder\mobile_development\cut-picture\cut-picture-maui\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\MultipleQualifiersPerDimensionFound.txt
+C:\stud-folder\mobile_development\cut-picture\cut-picture-maui\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\SkiaSharp.Views.WinUI.Native.Projection.dll
+C:\stud-folder\mobile_development\cut-picture\cut-picture-maui\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\SkiaSharp.Views.Maui.Controls.dll
+C:\stud-folder\mobile_development\cut-picture\cut-picture-maui\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\SkiaSharp.Views.Maui.Core.dll
+C:\stud-folder\mobile_development\cut-picture\cut-picture-maui\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\SkiaSharp.Views.Windows.dll
+C:\stud-folder\mobile_development\cut-picture\cut-picture-maui\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\SkiaSharp.Views.WinUI.Native.dll
+C:\stud-folder\mobile_development\cut-picture\cut-picture-maui\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\SkiaSharp.Views.WinUI.Native.winmd
+C:\stud-folder\mobile_development\cut-picture\cut-picture-maui\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\libEGL.dll
+C:\stud-folder\mobile_development\cut-picture\cut-picture-maui\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\libGLESv2.dll
