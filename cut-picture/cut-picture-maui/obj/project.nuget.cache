@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "4/G+N93rwYc=",
+  "dgSpecHash": "BZPbciMd/3g=",
   "success": true,
-  "projectFilePath": "C:\\stud-folder\\mobile_development\\cut-picture-wpf\\cut-picture-maui\\cut-picture-maui.csproj",
+  "projectFilePath": "C:\\stud-folder\\mobile_development\\cut-picture\\cut-picture-maui\\cut-picture-maui.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\victor\\.nuget\\packages\\googlegson\\2.11.0.3\\googlegson.2.11.0.3.nupkg.sha512",
     "C:\\Users\\victor\\.nuget\\packages\\microsoft.extensions.configuration\\9.0.0\\microsoft.extensions.configuration.9.0.0.nupkg.sha512",

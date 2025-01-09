@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("kursach-wpf")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fdfcb5705f07f9d429858948c4a5899a46fd6634")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d640643d75b9d55ae09578534f4e0a76366de0de")]
 [assembly: System.Reflection.AssemblyProductAttribute("kursach-wpf")]
 [assembly: System.Reflection.AssemblyTitleAttribute("kursach-wpf")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

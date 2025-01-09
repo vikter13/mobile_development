@@ -76,7 +76,6 @@ namespace ImageEditor
             if (_image == null)
                 throw new InvalidOperationException("No image to crop.");
 
-            // Проверяем и корректируем размеры области обрезки
             cropArea = new Rectangle(
                 Math.Max(0, cropArea.X),
                 Math.Max(0, cropArea.Y),
@@ -84,7 +83,6 @@ namespace ImageEditor
                 Math.Min(cropArea.Height, _image.Height - cropArea.Y)
             );
 
-            // Создаем новое изображение для обрезанной области
             Bitmap croppedImage = new Bitmap(cropArea.Width, cropArea.Height);
 
             using (Graphics g = Graphics.FromImage(croppedImage))
@@ -93,7 +91,6 @@ namespace ImageEditor
                 g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
                 g.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
 
-                // Копируем выбранную область в новое изображение
                 g.DrawImage(
                     _image,
                     new Rectangle(0, 0, cropArea.Width, cropArea.Height),
@@ -104,7 +101,6 @@ namespace ImageEditor
             return croppedImage;
         }
 
-        // Метод GetImageSize для получения размера изображения
         public Size GetImageSize() => _image?.Size ?? Size.Empty;
     }
 }

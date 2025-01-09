@@ -3,7 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Quiz" Height="450" Width="800" WindowStartupLocation="CenterScreen">
     <Grid Background="#34495E">
-        <TextBlock Name="QuizTitle" FontSize="36" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="20" />
-        <Button Content="Complete Quiz" Width="200" Height="50" VerticalAlignment="Center" HorizontalAlignment="Center" Click="CompleteQuiz_Click" />
+        <TextBlock Name="QuestionText" FontSize="24" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="20" />
+        <UniformGrid Rows="2" Columns="2" Margin="20" VerticalAlignment="Center">
+            <Button Name="Answer1Button" Click="AnswerButton_Click" />
+            <Button Name="Answer2Button" Click="AnswerButton_Click" />
+            <Button Name="Answer3Button" Click="AnswerButton_Click" />
+            <Button Name="Answer4Button" Click="AnswerButton_Click" />
+        </UniformGrid>
     </Grid>
 </Window>

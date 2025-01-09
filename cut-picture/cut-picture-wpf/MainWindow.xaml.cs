@@ -12,7 +12,7 @@ using Microsoft.Win32;
 using Point = System.Windows.Point;
 using Rectangle = System.Windows.Shapes.Rectangle;
 using System.Drawing;
-using System.Drawing.Imaging; // Для работы с изображениями через GDI+
+using System.Drawing.Imaging;
 
 namespace ImageEditor
 {
@@ -108,10 +108,8 @@ namespace ImageEditor
             }
         }
 
-        // Обработчик изменения настроек сетки
         private void GridSettings_Changed(object sender, RoutedEventArgs e)
         {
-            // Проверяем, что элементы управления не равны null, прежде чем работать с их SelectedItem
             if (RowsComboBox.SelectedItem != null)
             {
                 _rows = (int)RowsComboBox.SelectedItem;
@@ -151,7 +149,6 @@ namespace ImageEditor
             CreateSelectionGrid();
         }
 
-        // Сохранение выделенных областей как отдельных изображений
         public void SaveAreasButton_Click(object sender, RoutedEventArgs e)
         {
             if (_imageHandler.GetImage() == null || _selectionRectangles.Count == 0)
@@ -175,34 +172,28 @@ namespace ImageEditor
                     var baseFileName = System.IO.Path.GetFileNameWithoutExtension(dialog.FileName);
                     var index = 1;
 
-                    // Получаем угол поворота из ImageRotation
                     float rotationAngle = (float)ImageRotation.Angle;
 
                     foreach (var rect in _selectionRectangles)
                     {
-                        // Получаем позицию прямоугольника на Canvas
                         var left = Canvas.GetLeft(rect);
                         var top = Canvas.GetTop(rect);
 
-                        // Пересчитываем координаты и размеры с учетом масштаба
                         var cropRect = new System.Drawing.Rectangle(
-                                (int)left,   // Округляем координаты для точности
-                                (int)top,    // Округляем координаты для точности
-                                (int)rect.Width, // Округляем размеры
-                                (int)rect.Height // Используем масштаб для высоты
+                                (int)left,
+                                (int)top,
+                                (int)rect.Width,
+                                (int)rect.Height
                         );
 
-                        // Проверяем, что координаты не выходят за пределы изображения
                         var imageSize = _imageHandler.GetImageSize();
                         cropRect.X = Math.Max(0, Math.Min(cropRect.X, imageSize.Width - 1));
                         cropRect.Y = Math.Max(0, Math.Min(cropRect.Y, imageSize.Height - 1));
                         cropRect.Width = Math.Min(cropRect.Width, imageSize.Width - cropRect.X);
                         cropRect.Height = Math.Min(cropRect.Height, imageSize.Height - cropRect.Y);
 
-                        // Обрезаем изображение, чтобы получить фрагмент с учетом поворота
                         using (var croppedImage = _imageHandler.CropImage(cropRect))
                         {
-                            // Применяем поворот к обрезанному изображению
                             Bitmap rotatedImage = RotateImage(croppedImage, rotationAngle);
 
                             string fileName = System.IO.Path.Combine(baseFolder!, $"{baseFileName}_{index}.png");
@@ -225,13 +216,11 @@ namespace ImageEditor
 
         private Bitmap RotateImage(Bitmap image, float angle)
         {
-            // Создаем новое изображение, чтобы учесть поворот
             Bitmap rotatedBitmap = new Bitmap(image.Width, image.Height);
             rotatedBitmap.SetResolution(image.HorizontalResolution, image.VerticalResolution);
 
             using (Graphics g = Graphics.FromImage(rotatedBitmap))
             {
-                // Поворачиваем картинку вокруг ее центра
                 g.Clear(System.Drawing.Color.Transparent);
                 g.RotateTransform(angle);
                 g.DrawImage(image, new System.Drawing.Point(0, 0));
@@ -239,8 +228,6 @@ namespace ImageEditor
 
             return rotatedBitmap;
         }
-
-
 
         private void ScrollViewer_MouseWheel(object sender, MouseWheelEventArgs e)
         {
@@ -339,7 +326,6 @@ namespace ImageEditor
             }
         }
 
-
         public void CreateSelectionGrid()
         {
             SelectionCanvas.Children.Clear();
@@ -353,7 +339,6 @@ namespace ImageEditor
 
             if (canvasWidth <= 0 || canvasHeight <= 0) return;
 
-            // Разделяем изображение на одинаковые квадраты
             var cellWidth = imageSize.Width / _columns;
             var cellHeight = imageSize.Height / _rows;
 

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "MwIMEiLNNDs=",
+  "dgSpecHash": "4w6raZFFkqE=",
   "success": true,
-  "projectFilePath": "C:\\stud-folder\\mobile_development\\cut-picture-wpf\\cut-picture-wpf\\cut-picture-wpf.csproj",
+  "projectFilePath": "C:\\stud-folder\\mobile_development\\cut-picture\\cut-picture-wpf\\cut-picture-wpf.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\victor\\.nuget\\packages\\microsoft.win32.systemevents\\9.0.0\\microsoft.win32.systemevents.9.0.0.nupkg.sha512",
     "C:\\Users\\victor\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",

@@ -1,14 +1,14 @@
 {
   "format": 1,
   "restore": {
-    "C:\\stud-folder\\mobile_development\\cut-picture-wpf\\cut-picture-wpf\\cut-picture-wpf.csproj": {}
+    "C:\\stud-folder\\mobile_development\\cut-picture\\cut-picture-wpf\\cut-picture-wpf.csproj": {}
   },
   "projects": {
-    "C:\\stud-folder\\mobile_development\\cut-picture-wpf\\class-library-cut-picture\\class-library-cut-picture.csproj": {
+    "C:\\stud-folder\\mobile_development\\cut-picture\\class-library-cut-picture\\class-library-cut-picture.csproj": {
       "restore": {
-        "projectUniqueName": "C:\\stud-folder\\mobile_development\\cut-picture-wpf\\class-library-cut-picture\\class-library-cut-picture.csproj",
+        "projectUniqueName": "C:\\stud-folder\\mobile_development\\cut-picture\\class-library-cut-picture\\class-library-cut-picture.csproj",
         "projectName": "class-library-cut-picture",
-        "projectPath": "C:\\stud-folder\\mobile_development\\cut-picture-wpf\\class-library-cut-picture\\class-library-cut-picture.csproj",
+        "projectPath": "C:\\stud-folder\\mobile_development\\cut-picture\\class-library-cut-picture\\class-library-cut-picture.csproj",
         "UsingMicrosoftNETSdk": false,
         "frameworks": {
           "net48": {
@@ -20,14 +20,14 @@
         "net48": {}
       }
     },
-    "C:\\stud-folder\\mobile_development\\cut-picture-wpf\\cut-picture-wpf\\cut-picture-wpf.csproj": {
+    "C:\\stud-folder\\mobile_development\\cut-picture\\cut-picture-wpf\\cut-picture-wpf.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\stud-folder\\mobile_development\\cut-picture-wpf\\cut-picture-wpf\\cut-picture-wpf.csproj",
+        "projectUniqueName": "C:\\stud-folder\\mobile_development\\cut-picture\\cut-picture-wpf\\cut-picture-wpf.csproj",
         "projectName": "cut-picture-wpf",
-        "projectPath": "C:\\stud-folder\\mobile_development\\cut-picture-wpf\\cut-picture-wpf\\cut-picture-wpf.csproj",
+        "projectPath": "C:\\stud-folder\\mobile_development\\cut-picture\\cut-picture-wpf\\cut-picture-wpf.csproj",
         "packagesPath": "C:\\Users\\victor\\.nuget\\packages\\",
-        "outputPath": "C:\\stud-folder\\mobile_development\\cut-picture-wpf\\cut-picture-wpf\\obj\\",
+        "outputPath": "C:\\stud-folder\\mobile_development\\cut-picture\\cut-picture-wpf\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -49,8 +49,8 @@
           "net9.0-windows7.0": {
             "targetAlias": "net9.0-windows",
             "projectReferences": {
-              "C:\\stud-folder\\mobile_development\\cut-picture-wpf\\class-library-cut-picture\\class-library-cut-picture.csproj": {
-                "projectPath": "C:\\stud-folder\\mobile_development\\cut-picture-wpf\\class-library-cut-picture\\class-library-cut-picture.csproj"
+              "C:\\stud-folder\\mobile_development\\cut-picture\\class-library-cut-picture\\class-library-cut-picture.csproj": {
+                "projectPath": "C:\\stud-folder\\mobile_development\\cut-picture\\class-library-cut-picture\\class-library-cut-picture.csproj"
               }
             }
           }
