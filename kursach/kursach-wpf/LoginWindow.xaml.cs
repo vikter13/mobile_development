@@ -18,9 +18,9 @@ namespace kursach_wpf
 
             if (DatabaseHelper.AuthenticateUser(username, password))
             {
-                var userId = DatabaseHelper.GetUserId(username); // Получаем ID пользователя.
+                var userId = DatabaseHelper.GetUserId(username); 
                 MessageBox.Show("Login successful!");
-                var mainWindow = new MainWindow(userId); // Передаем userId.
+                var mainWindow = new MainWindow(userId); 
                 mainWindow.Show();
                 Close();
             }

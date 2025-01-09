@@ -36,7 +36,7 @@ namespace kursach_wpf
             }
             finally
             {
-                UpdateButtonStatus(); // Убедимся, что кнопки обновятся корректно.
+                UpdateButtonStatus();
             }
         }
 
@@ -49,12 +49,11 @@ namespace kursach_wpf
                     var quizId = int.Parse(button.Tag.ToString());
                     var result = DatabaseHelper.GetQuizResult(_userId, quizId);
 
-                    // Меняем цвет кнопки в зависимости от результата
                     button.Background = result switch
                     {
-                        null => Brushes.White,    // Не завершено
-                        0 => Brushes.Red,         // Неправильный ответ
-                        1 => Brushes.Green,       // Правильный ответ
+                        null => Brushes.White,
+                        0 => Brushes.Red,
+                        1 => Brushes.Green,
                         _ => Brushes.White
                     };
                 }

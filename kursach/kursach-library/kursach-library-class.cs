@@ -22,9 +22,9 @@ namespace KursachLibrary
     {
         public int Id { get; set; }
         public string QuestionText { get; set; }
-        public string ImagePath { get; set; } // Путь к изображению для вопроса
+        public string ImagePath { get; set; }
         public List<string> Answers { get; set; } = new List<string>();
-        public List<string> AnswerImagePaths { get; set; } = new List<string>(); // Пути к изображениям для ответов
+        public List<string> AnswerImagePaths { get; set; } = new List<string>();
         public int CorrectAnswer { get; set; }
     }
 
@@ -73,7 +73,6 @@ namespace KursachLibrary
             command.CommandText = createResultsTable;
             command.ExecuteNonQuery();
 
-            // Добавление примеров вопросов
             command.CommandText = "SELECT COUNT(*) FROM Questions;";
             var count = Convert.ToInt32(command.ExecuteScalar());
             if (count == 0)
@@ -81,14 +80,13 @@ namespace KursachLibrary
                 command.CommandText = @"
                 INSERT INTO Questions (QuizId, QuestionText, ImagePath, Answer1, Answer2, Answer3, Answer4, AnswerImage1, AnswerImage2, AnswerImage3, AnswerImage4, CorrectAnswer)
                 VALUES
-                (1, 'What is 2 + 2?', NULL, '3', '4', '5', '6', NULL, NULL, NULL, NULL, 2),
-                (2, 'What is the capital of France?', NULL, 'Berlin', 'Madrid', 'Paris', 'Rome', NULL, NULL, NULL, NULL, 3),
-                (3, NULL, 'C:\\stud-folder\\mobile_development\\kursach\\ezhik.jpg', 'Answer 1', 'Answer 2', 'Answer 3', 'Answer 4', NULL, NULL, NULL, NULL, 2),
-                (4, 'Choose the correct flag:', NULL, NULL, NULL, NULL, NULL, 'C:\\stud-folder\\mobile_development\\kursach\\ezhik.jpg', 'C:\\images\\flag2.jpg', 'C:\\images\\flag3.jpg', 'C:\\images\\flag4.jpg', 3);";
+                (1, '2 + 2?', NULL, '1', '2', '4', '3', NULL, NULL, NULL, NULL, 2),
+                (2, 'What is the capital of Great Britan?', NULL, 'Berlin', 'Madrid', 'Paris', 'London', NULL, NULL, NULL, NULL, 3),
+                (3, NULL, 'C:\\stud-folder\\mobile_development\\kursach\\ezhik.jpg', 'ezhik', 'ptiza', 'mishka', 'koshka', NULL, NULL, NULL, NULL, 0),
+                (4, 'Who is the China?', NULL, NULL, NULL, NULL, NULL, 'C:\\stud-folder\\mobile_development\\kursach\\ezhik.jpg', 'C:\\stud-folder\\mobile_development\\kursach\\russia.jpg', 'C:\\stud-folder\\mobile_development\\kursach\\china.jpg', 'C:\\stud-folder\\mobile_development\\kursach\\sever-korea.jpg', 2);";
                 command.ExecuteNonQuery();
             }
         }
-
 
         public static List<Question> GetQuestions(int quizId)
         {
@@ -139,7 +137,6 @@ namespace KursachLibrary
             using var connection = new SQLiteConnection($"Data Source={DatabasePath}");
             connection.Open();
 
-            // Удаляем старый результат, если он существует
             var deleteQuery = "DELETE FROM Results WHERE UserId = @UserId AND QuizId = @QuizId AND QuestionId = @QuestionId;";
             using var deleteCommand = new SQLiteCommand(deleteQuery, connection);
             deleteCommand.Parameters.AddWithValue("@UserId", userId);
@@ -147,7 +144,6 @@ namespace KursachLibrary
             deleteCommand.Parameters.AddWithValue("@QuestionId", questionId);
             deleteCommand.ExecuteNonQuery();
 
-            // Добавляем новый результат
             var insertQuery = @"
             INSERT INTO Results (UserId, QuizId, QuestionId, IsCorrect) 
             VALUES (@UserId, @QuizId, @QuestionId, @IsCorrect);";
@@ -185,7 +181,6 @@ namespace KursachLibrary
             var result = command.ExecuteScalar();
             return result != null ? Convert.ToInt32(result) : -1;
         }
-
 
         public static bool AuthenticateUser(string username, string password)
         {
