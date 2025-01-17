@@ -1,0 +1,39 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v9.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v9.0": {
+      "exam-project-wpf/1.0.0": {
+        "dependencies": {
+          "class-library-exam": "1.0.0"
+        },
+        "runtime": {
+          "exam-project-wpf.dll": {}
+        }
+      },
+      "class-library-exam/1.0.0": {
+        "runtime": {
+          "class-library-exam.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "exam-project-wpf/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "class-library-exam/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

@@ -1,0 +1,12 @@
+C:\stud-folder\mobile_development\exam-project\class-library-exam\obj\Debug\net9.0\class-library-exam.GeneratedMSBuildEditorConfig.editorconfig
+C:\stud-folder\mobile_development\exam-project\class-library-exam\obj\Debug\net9.0\class-library-exam.AssemblyInfoInputs.cache
+C:\stud-folder\mobile_development\exam-project\class-library-exam\obj\Debug\net9.0\class-library-exam.AssemblyInfo.cs
+C:\stud-folder\mobile_development\exam-project\class-library-exam\obj\Debug\net9.0\class-library-exam.csproj.CoreCompileInputs.cache
+C:\stud-folder\mobile_development\exam-project\class-library-exam\obj\Debug\net9.0\class-library-exam.sourcelink.json
+C:\stud-folder\mobile_development\exam-project\class-library-exam\bin\Debug\net9.0\class-library-exam.deps.json
+C:\stud-folder\mobile_development\exam-project\class-library-exam\bin\Debug\net9.0\class-library-exam.dll
+C:\stud-folder\mobile_development\exam-project\class-library-exam\bin\Debug\net9.0\class-library-exam.pdb
+C:\stud-folder\mobile_development\exam-project\class-library-exam\obj\Debug\net9.0\class-library-exam.dll
+C:\stud-folder\mobile_development\exam-project\class-library-exam\obj\Debug\net9.0\refint\class-library-exam.dll
+C:\stud-folder\mobile_development\exam-project\class-library-exam\obj\Debug\net9.0\class-library-exam.pdb
+C:\stud-folder\mobile_development\exam-project\class-library-exam\obj\Debug\net9.0\ref\class-library-exam.dll
